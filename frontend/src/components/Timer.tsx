@@ -1,12 +1,17 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { useTimer } from "../hooks/useTimer";
 
 export default function Timer() {
   const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(1); // default 1 min
-
+  const [minutes, setMinutes] = useState(1);
   const totalSeconds = hours * 3600 + minutes * 60;
-  const { timeLeft, isRunning, start, pause, reset } = useTimer(totalSeconds);
+  const { timeLeft, isRunning, status, start, stop, reset } = useTimer(totalSeconds);
+
+  // When duration changes, reset timer
+  useEffect(() => {
+    reset(totalSeconds);
+  }, [hours, minutes]);
 
   const formatTime = (secs: number) => {
     const h = Math.floor(secs / 3600);
@@ -21,6 +26,7 @@ export default function Timer() {
     <div className="flex flex-col items-center gap-6 mt-10">
       {/* Time Display */}
       <div className="text-4xl font-mono">{formatTime(timeLeft)}</div>
+      <div className="text-sm text-gray-500">Status: {status}</div>
 
       {/* Dials */}
       <div className="flex gap-6">
@@ -54,17 +60,17 @@ export default function Timer() {
       <div className="flex gap-4">
         {!isRunning ? (
           <button
-            onClick={start}
+            onClick={() => start(totalSeconds)}
             className="px-4 py-2 bg-green-500 text-white rounded"
           >
             Start
           </button>
         ) : (
           <button
-            onClick={pause}
+            onClick={stop}
             className="px-4 py-2 bg-yellow-500 text-white rounded"
           >
-            Pause
+            Stop
           </button>
         )}
         <button
