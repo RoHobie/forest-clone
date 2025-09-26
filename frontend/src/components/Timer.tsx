@@ -23,13 +23,14 @@ export default function Timer() {
   };
 
   return (
+    <div className="flex justify-center items-center min-h-screen min-w-screen bg-gray-900 ">
     <div className="flex flex-col items-center gap-6 mt-10">
       {/* Time Display */}
-      <div className="text-4xl font-mono">{formatTime(timeLeft)}</div>
-      <div className="text-sm text-gray-500">Status: {status}</div>
+      <div className="text-4xl font-mono text-white">{formatTime(timeLeft)}</div>
+      <div className="text-sm text-white">Status: {status}</div>
 
       {/* Dials */}
-      <div className="flex gap-6">
+      <div className="flex gap-6 text-white">
         <div className="flex flex-col items-center">
           <label className="mb-2">Hours</label>
           <input
@@ -80,6 +81,7 @@ export default function Timer() {
           Reset
         </button>
       </div>
+    </div>
     </div>
   );
 }
