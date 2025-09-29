@@ -7,10 +7,25 @@ import (
 
 	"backend/internal/room"
 	"backend/internal/timer"
+	"backend/internal/user"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 )
+
+func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
+	type reqBody struct {
+		Name string `json:"name"`
+	}
+	var body reqBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil || body.Name == "" {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+	newUser := user.CreateUser(body.Name)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(newUser)
+}
 
 func CreateRoomHandler(w http.ResponseWriter, r *http.Request) {
 	roomObj := room.CreateRoom()
