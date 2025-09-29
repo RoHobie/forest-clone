@@ -14,6 +14,7 @@ func main() {
 	r.Use(corsMiddleware)
 	r.Use(middleware.Logger)
 
+	r.Post("/user/create", httpapi.CreateUserHandler)
 	r.Post("/room/create", httpapi.CreateRoomHandler)
 	r.Post("/timer/start", httpapi.StartTimerHandler)
 	r.Post("/timer/stop/{id}", httpapi.StopTimerHandler)
