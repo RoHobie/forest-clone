@@ -41,12 +41,12 @@ export function useTimer(initialSeconds: number) {
     setTimeLeft(timer.duration * 60);
   }, [initialSeconds]);
 
-  // Stop timer (POST to backend)
-  const stop = useCallback(async () => {
+  // Pause timer (POST to backend)
+  const pause = useCallback(async () => {
     if (!timerId) return;
-    await fetch(`${API_BASE}/timer/stop/${timerId}`, { method: "POST" });
+    await fetch(`${API_BASE}/timer/pause/${timerId}`, { method: "POST" });
     setIsRunning(false);
-    setStatus("stopped");
+    setStatus("paused");
   }, [timerId]);
 
   // Poll backend for timer updates
@@ -76,5 +76,5 @@ export function useTimer(initialSeconds: number) {
     setTimeLeft(seconds);
   }, [initialSeconds]);
 
-  return { timeLeft, isRunning, status, start, stop, reset };
+  return { timeLeft, isRunning, status, start, pause, reset };
 }

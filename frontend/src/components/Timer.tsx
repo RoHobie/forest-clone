@@ -7,7 +7,7 @@ export default function Timer() {
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(1);
   const totalSeconds = hours * 3600 + minutes * 60;
-  const { timeLeft, isRunning, status, start, stop, reset } = useTimer(totalSeconds);
+  const { timeLeft, isRunning, status, start, pause, reset } = useTimer(totalSeconds);
 
   // When duration changes, reset timer
   useEffect(() => {
@@ -69,10 +69,10 @@ export default function Timer() {
           </Button>
         ) : (
           <Button
-            onClick={stop}
+            onClick={pause}
             className="px-4 py-2 bg-yellow-500 text-white rounded"
           >
-            Stop
+            Pause
           </Button>
         )}
         <Button
