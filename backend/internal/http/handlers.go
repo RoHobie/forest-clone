@@ -56,11 +56,11 @@ func StartTimerHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(t)
 }
 
-func StopTimerHandler(w http.ResponseWriter, r *http.Request) {
+func PauseTimerHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	t, ok := timer.GetTimer(id)
 	if ok {
-		t.Status = "stopped"
+		t.Status = "paused"
 		timer.UpdateTimer(t)
 	}
 	if !ok {
