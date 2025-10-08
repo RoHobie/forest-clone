@@ -59,14 +59,41 @@ func StartTimerHandler(w http.ResponseWriter, r *http.Request) {
 func PauseTimerHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	t, ok := timer.GetTimer(id)
-	if ok {
-		t.Status = "paused"
-		timer.UpdateTimer(t)
-	}
 	if !ok {
 		http.Error(w, "timer not found", http.StatusNotFound)
 		return
 	}
+
+	// mark paused and record pause time
+	t.Status = "paused"
+	t.PausedAt = time.Now()
+	timer.UpdateTimer(t)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(t)
+}
+
+func ResumeTimerHandler(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	t, ok := timer.GetTimer(id)
+	if !ok {
+		http.Error(w, "timer not found", http.StatusNotFound)
+		return
+	}
+
+	// only adjust if we have a valid PausedAt
+	if t.Status == "paused" && !t.PausedAt.IsZero() {
+		pausedDuration := time.Since(t.PausedAt)
+		// shift StartedAt forward by the paused duration so elapsed time excludes pause
+		t.StartedAt = t.StartedAt.Add(pausedDuration)
+		// clear paused timestamp
+		t.PausedAt = time.Time{}
+	}
+
+	t.Status = "running"
+	timer.UpdateTimer(t)
+
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(t)
 }
 

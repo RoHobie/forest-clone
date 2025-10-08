@@ -10,6 +10,7 @@ type Timer struct {
 	Duration  int       `json:"duration"` // in minutes
 	Status    string    `json:"status"`
 	StartedAt time.Time `json:"startedAt"`
+	PausedAt  time.Time `json:"pausedAt"`
 }
 
 var (
