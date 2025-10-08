@@ -18,6 +18,7 @@ func main() {
 	r.Post("/room/create", httpapi.CreateRoomHandler)
 	r.Post("/timer/start", httpapi.StartTimerHandler)
 	r.Post("/timer/pause/{id}", httpapi.PauseTimerHandler)
+	r.Post("/timer/resume/{id}", httpapi.ResumeTimerHandler) // <-- added route
 	r.Get("/timer/{id}", httpapi.GetTimerHandler)
 
 	http.ListenAndServe(":8080", r)
