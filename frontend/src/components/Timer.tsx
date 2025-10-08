@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useTimer } from "../hooks/useTimer";
 import { Button } from "@/components/ui/button"
@@ -7,7 +6,7 @@ export default function Timer() {
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(1);
   const totalSeconds = hours * 3600 + minutes * 60;
-  const { timeLeft, isRunning, status, start, pause, reset } = useTimer(totalSeconds);
+  const { timeLeft, status, start, pause, resume, reset } = useTimer(totalSeconds);
 
   // When duration changes, reset timer
   useEffect(() => {
@@ -60,19 +59,26 @@ export default function Timer() {
 
       {/* Controls */}
       <div className="flex gap-4">
-        {!isRunning ? (
+        {status === "paused" ? (
           <Button
-            onClick={() => start(totalSeconds)}
+            onClick={resume}
             className="px-4 py-2 bg-green-500 text-white rounded"
           >
-            Start
+            Resume
           </Button>
-        ) : (
+        ) : status === "running" ? (
           <Button
             onClick={pause}
             className="px-4 py-2 bg-yellow-500 text-white rounded"
           >
             Pause
+          </Button>
+        ) : (
+          <Button
+            onClick={() => start(totalSeconds)}
+            className="px-4 py-2 bg-green-500 text-white rounded"
+          >
+            Start
           </Button>
         )}
         <Button
